@@ -3,13 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-Pocket Calculator with LED Display
+<title>Pocket Calculator with LED Display</title>
 </head>
 <body>
 
 <h1>Pocket Calculator with LED Display</h1>
 
 <p>This repository contains a VHDL project for a pocket calculator that performs addition, subtraction, multiplication, and division operations. The results of the operations are displayed on an 8-digit LED display.</p>
+
+<img src="https://images.app.goo.gl/mYhgtWFdT839k7vR8" alt="Calculator Image 1">
+<img src="https://images.app.goo.gl/vKYH6SWyvkNs5WeX8" alt="Calculator Image 2">
+<img src="https://images.app.goo.gl/uAso3eDwSbLbba7T7" alt="Calculator Image 3">
 
 <h2>Description</h2>
 
