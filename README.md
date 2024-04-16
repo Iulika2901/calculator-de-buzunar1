@@ -13,7 +13,7 @@
 
 <img src="https://images.app.goo.gl/mYhgtWFdT839k7vR8" alt="Calculator Image 1">
 <img src="https://images.app.goo.gl/vKYH6SWyvkNs5WeX8" alt="Calculator Image 2">
-<img src="https://images.app.goo.gl/RV1uEC3UZWtLKfsc6" alt="Calculator Image 3">
+<img src="https://images.app.goo.gl/CMfQ6fGa7uuMjn5w5" alt="Calculator Image 3">
 
 <h2>Description</h2>
 
