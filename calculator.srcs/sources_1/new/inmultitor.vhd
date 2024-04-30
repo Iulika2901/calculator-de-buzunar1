@@ -45,6 +45,11 @@ end inmultitor;
  
 architecture Behavioral of inmultitor is
  
+component bcd_7segment is
+Port ( BCDin : in STD_LOGIC_VECTOR (3 downto 0);
+Seven_Segment : out STD_LOGIC_VECTOR (6 downto 0));
+end component;
+ 
   component sumator is
     Port (
       a    : in STD_LOGIC;
@@ -56,7 +61,8 @@ architecture Behavioral of inmultitor is
   end component;
  
   signal carry : std_logic_vector(7 downto 0);
-
+  signal cp_i: std_logic_vector(3 downto 0);
+  signal cp_o: std_logic_vector(3 downto 0);
  
 begin
   carry(0) <= cin;
@@ -73,11 +79,22 @@ process
   
   
     for j in 0 to inm loop
-      for i in 0 to 7 loop
-sumator_inst: sumator port map (a(j), b(i), carry(i), carry(i), s(i));
-      end loop;
+sumator_inst: sumator_complet port map (a(j), b(i), carry(i), carry(i), s(i));
     end loop;
   end process;
+  
+ cp_i(0)<=a(0);
+ cp_i(1)<=a(1);
+ cp_i(2)<=a(2);
+ cp_i(3)<=a(3);
+out1:  bcd_7segment  port map (cp_i,cp_o);
+
+ cp_i(0)<=a(4);
+cp_i(1)<=a(5);
+cp_i(2)<=a(6);
+cp_i(3)<=a(7);
+out2:  bcd_7segment  port map (cp_i,cp_o);
+
+
  
 end Behavioral;
-           
