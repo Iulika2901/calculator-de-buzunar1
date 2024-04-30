@@ -23,7 +23,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
-IEEE.STD_LOGIC_ARITH.ALL
+use IEEE.STD_LOGIC_ARITH.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -43,6 +43,14 @@ entity scazator is
 end scazator;
 
 architecture Behavioral of scazator is
+
+COMPONENT bcd_7segment
+PORT(
+BCDin : IN std_logic_vector(3 downto 0);
+Seven_Segment : OUT std_logic_vector(6 downto 0)
+);
+END COMPONENT;
+
 
 begin
 
