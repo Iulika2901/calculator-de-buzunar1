@@ -17,52 +17,67 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
+ 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+ 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
-
+ 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
-
+ 
 entity inmultitor is
-       Port ( a : inout STD_LOGIC_VECTOR (7 downto 0);
+       Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
         b : in STD_LOGIC_VECTOR(7 downto 0);
         s : in STD_LOGIC_VECTOR (7 downto 0);
         cin : in STD_LOGIC;
         cout : out STD_LOGIC);
-
+ 
 end inmultitor;
-
+ 
 architecture Behavioral of inmultitor is
+ 
+  component sumator is
+    Port (
+      a    : in STD_LOGIC;
+      b    : in STD_LOGIC;
+      cout : out STD_LOGIC;
+      cin  : in STD_LOGIC;
+      s    : out STD_LOGIC
+    );
+  end component;
+ 
+  signal carry : std_logic_vector(7 downto 0);
 
-component sumator is
-    Port ( a : inout STD_LOGIC;
-           b : in STD_LOGIC;
-           cout : out STD_LOGIC;
-           cin : in STD_LOGIC;
-           s : out STD_LOGIC);
-end component;
-
-
-signal carry :std_logic_vector (7 downto 0);
-signal inm: std_logic;
-
+ 
 begin
-carry(0)<=cin;
-cout<=carry(7);
-inm<=a;
-eth1: for j in 0 to inm generate
-eth: for i in 0 to 7 generate
-eth: sumator port map (b(i),b(i),carry(i),s(i),carry(i+1));
-end generate;
-end generate;
-
-
+  carry(0) <= cin;
+  cout <= carry(7);
+ 
+process 
+  variable inm   : integer :=0;  
+  begin
+  
+    for i in 7 downto 0 loop
+  inm:=to_integer(signed(a));
+  
+  end loop;
+  
+  
+    for j in 0 to inm loop
+      for i in 0 to 7 loop
+sumator_inst: sumator port map (a(j), b(i), carry(i), carry(i), s(i));
+      end loop;
+    end loop;
+  end process;
+ 
 end Behavioral;
+           
