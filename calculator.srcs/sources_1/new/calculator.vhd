@@ -37,13 +37,14 @@ entity calculator is
     Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
            b : in STD_LOGIC_VECTOR(7 downto 0);
            s : in STD_LOGIC_VECTOR (7 downto 0);
-           start : in STD_LOGIC;
+           --start : in STD_LOGIC;
            operatie : in STD_LOGIC_VECTOR (1 downto 0);
            clk : in STD_LOGIC;
-           rst : out STD_LOGIC;
+           rst : inout STD_LOGIC;
            cin : in STD_LOGIC;
            cout : out STD_LOGIC;
            bin : in STD_LOGIC;
+           rez : out STD_LOGIC_VECTOR (7 downto 0);
            bout : out STD_LOGIC);
 end calculator;
 
@@ -65,21 +66,67 @@ component scazator is
            s : out STD_LOGIC);
 end component;
 
+COMPONENT bcd_7segment
+PORT(
+BCDin : IN std_logic_vector(3 downto 0);
+Seven_Segment : OUT std_logic_vector(6 downto 0)
+);
+END COMPONENT;
+
+component inmultitor is
+       Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
+        b : in STD_LOGIC_VECTOR(7 downto 0);
+        s : in STD_LOGIC_VECTOR (7 downto 0);
+        cin : in STD_LOGIC;
+        cout : out STD_LOGIC);
+ 
+end component;
+
+component impartitor is
+       Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
+        b : in STD_LOGIC_VECTOR(7 downto 0);
+        s : in STD_LOGIC_VECTOR (7 downto 0);
+        bin : in STD_LOGIC;
+        bout : out STD_LOGIC);
+ 
+end component;
 
 signal carry :std_logic_vector (7 downto 0);
 signal borrow:std_logic_vector (7 downto 0);
+signal cp_i: std_logic_vector(3 downto 0);
+signal cp_o: std_logic_vector(3 downto 0);
 
 begin
-carry(0)<=cin;
-cout<=carry(7);
-eth: for i in 0 to 7 generate
-eth: sumator port map (a(i),b(i),carry(i),s(i),carry(i+1));
-end generate;
+ cin<='0';
+ bin<='0';
 
-borrow(0)<=bin;
-bout<=borrow(7);
-eth2: for i in 0 to 7 generate
-eth2: scazator port map(a(i),b(i),borrow(i),s(i),borrow(i+1));
-end generate;
 
+        process(operatie) is 
+ begin
+ case rst is
+ when '0'=>
+case operatie is
+
+ when "00" =>
+eth1: sumat_compl port map (a(i),b(i),carry(i),s(i),carry(i+1));
+rez<=a;
+
+when "01" =>
+eth3: scazator port map(a(i),b(i),borrow(i),s(i),borrow(i+1));
+rez<=a;
+
+when "10" =>
+eth4: inmultitor port map(a(i),b(i),cin(i),cout(i),s(i+1));
+rez<=a;
+
+when "11" =>
+eth5: impartitor port map(a(i),b(i),cin(i),cout(i),s(i+1));
+rez<=a;
+
+        end case;
+when '1'=>
+  rez<="00000000";
+  out1:  bcd_7segment  port map (cp_i,cp_o);
+  end case;
+   end process;
 end Behavioral;
