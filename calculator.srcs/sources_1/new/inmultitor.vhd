@@ -37,7 +37,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 entity inmultitor is
        Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
         b : in STD_LOGIC_VECTOR(7 downto 0);
-        s : in STD_LOGIC_VECTOR (7 downto 0);
+        s : out STD_LOGIC_VECTOR (7 downto 0); -- de tipul 'out' nu 'in'
         cin : in STD_LOGIC;
         cout : out STD_LOGIC);
  
@@ -60,28 +60,30 @@ end component;
     );
   end component;
  
-  signal carry : std_logic_vector(7 downto 0);
+  signal carry : std_logic_vector(8 downto 0);
   signal cp_i: std_logic_vector(3 downto 0);
   signal cp_o: std_logic_vector(3 downto 0);
  
 begin
-  carry(0) <= cin;
-  cout <= carry(7);
+  carry(0) <= cin; -- ca sa putem automatiza pe generate imi trebuie semnalul de carry pe 9 biti si carry(0) trebuie sa ia valoarea cin
+  cout <= carry(8); -- la fel cout trebuie sa primeasca valoarea de carry (8) ultimul din generator
  
-process 
-  variable inm   : integer :=0;  
+process (a)
+  variable inm: integer := 0;  
   begin
   
-    for i in 7 downto 0 loop
-  inm:=to_integer(signed(a));
-  
-  end loop;
-  
-  
-    for j in 0 to inm loop
-sumator_inst: sumator_complet port map (a(j), b(i), carry(i), carry(i), s(i));
-    end loop;
-  end process;
+--  for i in 7 downto 0 loop
+--    inm:=to_integer(signed(a));
+--  end loop;
+end process;
+
+sumator_inst:for j in 0 to 7 generate
+sumator_inst: sumator port map (a => a(j), 
+                                b => b(j), 
+                                cout => carry(j+1), 
+                                cin => carry(j), 
+                                s => s(j));
+end generate;
   
  cp_i(0)<=a(0);
  cp_i(1)<=a(1);
