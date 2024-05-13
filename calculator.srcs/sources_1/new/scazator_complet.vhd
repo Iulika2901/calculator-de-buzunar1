@@ -48,11 +48,11 @@ component scazator is
            bout : out STD_LOGIC;
            bin : in STD_LOGIC;
            s : out STD_LOGIC);
-end component
+end component;
 
 component bcd_7segment is
 Port ( BCDin : in STD_LOGIC_VECTOR (3 downto 0);
-Seven_Segment : out STD_LOGIC_VECTOR (6 downto 0));
+      Seven_Segment : out STD_LOGIC_VECTOR (6 downto 0));
 end component;
 
   signal cp_i: std_logic_vector(3 downto 0);
@@ -64,7 +64,11 @@ begin
 borrow(0)<=bin;
 bout<= borrow(7);
 eth: for i in 0 to 7 generate
-eth1: scazator port map (a(i),b(i),carry(i),s(i),carry(i+1));
+scazator_inst: scazator port map (a => a(i), 
+                                b => b(i), 
+                                bout => borrow(i+1), 
+                                bin => borrow(i), 
+                                s => s(i));
 end generate;
 
 
