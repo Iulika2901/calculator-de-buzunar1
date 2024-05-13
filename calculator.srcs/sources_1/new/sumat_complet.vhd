@@ -64,7 +64,11 @@ begin
 carry(0)<=cin;
 cout<=carry(7);
 eth: for i in 0 to 7 generate
-eth1: sumator port map (a(i),b(i),carry(i),s(i),carry(i+1));
+sumator_inst: sumator port map (a => a(i), 
+                                b => b(i), 
+                                cout => carry(i+1), 
+                                cin => carry(i), 
+                                s => s(i));
 end generate;
 
 
