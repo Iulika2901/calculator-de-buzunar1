@@ -34,8 +34,8 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity calculator is
-    Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
-           b : in STD_LOGIC_VECTOR(7 downto 0);
+    Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
+           b : in STD_LOGIC_VECTOR(6 downto 0);
            --s : in STD_LOGIC_VECTOR (7 downto 0);
            --start : in STD_LOGIC;
            operatie : in STD_LOGIC_VECTOR (1 downto 0);
@@ -44,7 +44,8 @@ entity calculator is
            cin : in STD_LOGIC;
            cout : out STD_LOGIC;
            bin : in STD_LOGIC;
-            rez : out STD_LOGIC_VECTOR (7 downto 0);
+            rez : inout STD_LOGIC_VECTOR (11 downto 0);
+             out1 : inout STD_LOGIC_VECTOR (3 downto 0);
            bout : out STD_LOGIC);
 end calculator;
 
@@ -74,38 +75,38 @@ Seven_Segment : OUT std_logic_vector(6 downto 0)
 END COMPONENT;
 
 component inmultitor is
-       Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
-        b : in STD_LOGIC_VECTOR(7 downto 0);
-        s : in STD_LOGIC_VECTOR (7 downto 0);
+       Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
+        b : in STD_LOGIC_VECTOR(6 downto 0);
+        s : in STD_LOGIC_VECTOR (11 downto 0);
         cin : in STD_LOGIC;
         cout : out STD_LOGIC);
  
 end component;
 
 component impartitor is
-       Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
-        b : in STD_LOGIC_VECTOR(7 downto 0);
-        s : in STD_LOGIC_VECTOR (7 downto 0);
+       Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
+        b : in STD_LOGIC_VECTOR(6 downto 0);
+        s : in STD_LOGIC_VECTOR (11 downto 0);
         bin : in STD_LOGIC;
         bout : out STD_LOGIC);
  
 end component;
 
 component sumat_compl is
-    Port ( a : in STD_LOGIC_vector (7 downto 0);
-           b : in STD_LOGIC_vector (7 downto 0);
+    Port ( a : in STD_LOGIC_vector (6 downto 0);
+           b : in STD_LOGIC_vector (6 downto 0);
            cout : out STD_LOGIC;
            cin : in STD_LOGIC;
-           s : out STD_LOGIC_vector (7 downto 0));
+           s : out STD_LOGIC_vector (11 downto 0));
 end component;
 
 component scazator_complet is
 
- Port ( a : in STD_LOGIC_vector (7 downto 0);
-         b : in STD_LOGIC_vector (7 downto 0);
+ Port ( a : in STD_LOGIC_vector (6 downto 0);
+         b : in STD_LOGIC_vector (6 downto 0);
          bout : out STD_LOGIC;
          bin : in STD_LOGIC;
-         s : out STD_LOGIC_vector (7 downto 0));
+         s : out STD_LOGIC_vector (11 downto 0));
 end component;
 
 
@@ -113,10 +114,11 @@ end component;
 --signal borrow:std_logic_vector (7 downto 0);
 signal cp_i: std_logic_vector(3 downto 0);
 signal cp_o: std_logic_vector(6 downto 0);
-signal rez1 :  STD_LOGIC_VECTOR (7 downto 0);
-signal rez2 :  STD_LOGIC_VECTOR (7 downto 0);
-signal rez3 :  STD_LOGIC_VECTOR (7 downto 0);
-signal rez4 :  STD_LOGIC_VECTOR (7 downto 0);
+signal rez1 :  STD_LOGIC_VECTOR (11 downto 0);
+signal rez2 :  STD_LOGIC_VECTOR (11 downto 0);
+signal rez3 :  STD_LOGIC_VECTOR (11 downto 0);
+signal rez4 :  STD_LOGIC_VECTOR (11 downto 0);
+
 
  --cin<='0';
 -- bin<='0';
@@ -173,8 +175,25 @@ case rst is
 end process;
 
 
+out1(0)<=rez(0);
+out1(1)<=rez(1);
+out1(2)<=rez(2);
+out1(3)<=rez(3);
 
-out1:  bcd_7segment  port map (cp_o,rez);
+out2:  bcd_7segment  port map (out1,cp_o); 
+out1(0)<=rez(4);
+out1(1)<=rez(5);
+out1(2)<=rez(6);
+out1(3)<=rez(7);
+
+out3:  bcd_7segment  port map (out1,cp_o); 
+
+out1(0)<=rez(8);
+out1(1)<=rez(9);
+out1(2)<=rez(10);
+out1(3)<=rez(11);
+
+out4:  bcd_7segment  port map (out1,cp_o); 
 
   -- end process;
   
