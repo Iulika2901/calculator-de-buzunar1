@@ -35,9 +35,9 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 --use UNISIM.VComponents.all;
  
 entity impartitor is
-       Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
-        b : in STD_LOGIC_VECTOR(7 downto 0);
-        s : out STD_LOGIC_VECTOR (7 downto 0);
+       Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
+        b : in STD_LOGIC_VECTOR(6 downto 0);
+        s : out STD_LOGIC_VECTOR (11 downto 0);
         bin : in STD_LOGIC;
         bout : out STD_LOGIC);
  
@@ -47,11 +47,11 @@ architecture Behavioral of impartitor is
  
  component scazator_complet is
 
- Port ( a : in STD_LOGIC_vector (7 downto 0);
-         b : in STD_LOGIC_vector (7 downto 0);
+ Port ( a : in STD_LOGIC_vector (6 downto 0);
+         b : in STD_LOGIC_vector (6 downto 0);
          bout : out STD_LOGIC;
          bin : in STD_LOGIC;
-         s : out STD_LOGIC_vector (7 downto 0));
+         s : out STD_LOGIC_vector (11 downto 0));
 end component;
 
  
