@@ -44,7 +44,7 @@ entity calculator is
            cin : in STD_LOGIC;
            cout : out STD_LOGIC;
            bin : in STD_LOGIC;
-           rez : out STD_LOGIC_VECTOR (7 downto 0);
+            rez : out STD_LOGIC_VECTOR (7 downto 0);
            bout : out STD_LOGIC);
 end calculator;
 
@@ -113,6 +113,10 @@ end component;
 --signal borrow:std_logic_vector (7 downto 0);
 signal cp_i: std_logic_vector(3 downto 0);
 signal cp_o: std_logic_vector(6 downto 0);
+signal rez1 :  STD_LOGIC_VECTOR (7 downto 0);
+signal rez2 :  STD_LOGIC_VECTOR (7 downto 0);
+signal rez3 :  STD_LOGIC_VECTOR (7 downto 0);
+signal rez4 :  STD_LOGIC_VECTOR (7 downto 0);
 
  --cin<='0';
 -- bin<='0';
@@ -122,32 +126,57 @@ signal i: integer:=0;
 begin
 
 
-     process(operatie)  
- begin
- case rst is
- when '0'=>
-case operatie is
+  --   process(operatie)  
+-- begin
 
- when "00" =>
-eth1: sumat_compl port map (a,b, cout,cin, rez);
+eth1: sumat_compl port map (a,b, cout,cin, rez1);
 --rez<=a;
 
-when "01" =>
-eth3: scazator_complet port map(a,b,bin,bout,rez);
+
+eth3: scazator_complet port map(a,b,bout,bin,rez2);
 --rez<=a;
 
-when "10" =>
-eth4: inmultitor port map(a,b,rez,cin,cout);
+
+eth4: inmultitor port map(a,b,rez3,cin,cout);
 --rez<=a;
 
-when "11" =>
-eth5: impartitor port map(a,b,rez,cin,cout);
+
+eth5: impartitor port map(a,b,rez4,cin,cout);
 --rez<=a;
 
-        end case;
-when '1'=>
-  rez<="00000000";
-out1:  bcd_7segment  port map (rez,cp_o);
-  end case;
-   end process;
+
+
+process
+begin
+case rst is                 
+     when '0'=>
+       case operatie is
+        when "00" =>
+       rez<=rez1;
+       --rez<=a;
+       
+       when "01" =>
+       rez<=rez2;
+       --rez<=a;
+       
+       when "10" =>
+       rez<=rez3;
+       --rez<=a;
+       
+       when "11" =>
+         rez<=rez4;
+   
+   end case;
+  when '1'=> 
+  rez<="0000000";
+   end case;
+end process;
+
+
+
+out1:  bcd_7segment  port map (cp_o,rez);
+
+  -- end process;
+  
+  
 end Behavioral;
