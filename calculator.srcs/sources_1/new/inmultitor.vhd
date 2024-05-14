@@ -35,9 +35,9 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 --use UNISIM.VComponents.all;
  
 entity inmultitor is
-       Port ( a : in STD_LOGIC_VECTOR (7 downto 0);
-        b : in STD_LOGIC_VECTOR(7 downto 0);
-        s : out STD_LOGIC_VECTOR (7 downto 0); -- de tipul 'out' nu 'in'
+       Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
+        b : in STD_LOGIC_VECTOR(6 downto 0);
+        s : out STD_LOGIC_VECTOR (11 downto 0); -- de tipul 'out' nu 'in'
         cin : in STD_LOGIC;
         cout : out STD_LOGIC);
  
@@ -62,7 +62,7 @@ end component;
  
   signal carry : std_logic_vector(8 downto 0);
   signal cp_i: std_logic_vector(3 downto 0);
-  signal cp_o: std_logic_vector(3 downto 0);
+  signal cp_o: std_logic_vector(6 downto 0);
  
 begin
   carry(0) <= cin; -- ca sa putem automatiza pe generate imi trebuie semnalul de carry pe 9 biti si carry(0) trebuie sa ia valoarea cin
@@ -77,7 +77,7 @@ process (a)
 --  end loop;
 end process;
 
-sumator_inst:for j in 0 to 7 generate
+sumator_inst:for j in 0 to 6 generate
 sumator_inst: sumator port map (a => a(j), 
                                 b => b(j), 
                                 cout => carry(j+1), 
@@ -94,7 +94,7 @@ out1:  bcd_7segment  port map (cp_i,cp_o);
  cp_i(0)<=a(4);
 cp_i(1)<=a(5);
 cp_i(2)<=a(6);
-cp_i(3)<=a(7);
+cp_i(3)<='0';
 out2:  bcd_7segment  port map (cp_i,cp_o);
 
 
