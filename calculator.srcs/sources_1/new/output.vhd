@@ -13,6 +13,8 @@ begin
 process(BCDin)
 begin
  
+ 
+ 
 case BCDin is
     when "0000" => Seven_Segment <= "0000001"; -- "0"     
     when "0001" => Seven_Segment <= "1001111"; -- "1" 
@@ -30,6 +32,7 @@ case BCDin is
     when "1101" => Seven_Segment <= "1000010"; -- d
     when "1110" => Seven_Segment <= "0110000"; -- E
     when "1111" => Seven_Segment <= "0111000"; -- F
+    when others => Seven_Segment <= "0000000";--nmk special functioneaza ca un rst
     end case;
  
 end process;
