@@ -3,10 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity multiplication is
-	port( X: in std_logic_vector (7 downto 0);
-		Y: in std_logic_vector (7 downto 0);
+	port( X: in std_logic_vector (6 downto 0);
+		Y: in std_logic_vector (6 downto 0);
 		CLK,RST: in std_logic;
-		rez: out std_logic_vector(7 downto 0);
+		rez: out std_logic_vector(11 downto 0);
 		carryM: out std_logic);
 end entity;
 
