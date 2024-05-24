@@ -18,7 +18,6 @@
 -- 
 ----------------------------------------------------------------------------------
 
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
@@ -34,20 +33,23 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity calculator is
-    Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
+    Port ( 
+           a : in STD_LOGIC_VECTOR (6 downto 0);
            b : in STD_LOGIC_VECTOR(6 downto 0);
-           --s : in STD_LOGIC_VECTOR (7 downto 0);
-           --start : in STD_LOGIC;
            operatie : in STD_LOGIC_VECTOR (1 downto 0);
            clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            cin : in STD_LOGIC;
            cout : out STD_LOGIC;
            bin : in STD_LOGIC;
-            rez : inout STD_LOGIC_VECTOR (11 downto 0);
-             out1 : inout STD_LOGIC_VECTOR (3 downto 0);
-           bout : out STD_LOGIC);
+           rez : inout STD_LOGIC_VECTOR (11 downto 0); -- Change from inout to out
+           out1 : inout STD_LOGIC_VECTOR (3 downto 0);
+           bout : out STD_LOGIC;
+          cp_o: out std_logic_vector(6 downto 0);
+          anod: out std_logic_vector (2 downto 0)         
+         );
 end calculator;
+
 
 architecture Behavioral of calculator is
 
@@ -70,40 +72,43 @@ end component;
 COMPONENT bcd_7segment
 PORT(
 BCDin : IN std_logic_vector(3 downto 0);
-Seven_Segment : OUT std_logic_vector(6 downto 0)
+Seven_Segment : OUT std_logic_vector(6 downto 0);
+anod : out std_logic_vector(2 downto 0)
 );
 END COMPONENT;
 
-component inmultitor is
-       Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
-        b : in STD_LOGIC_VECTOR(6 downto 0);
-        s : in STD_LOGIC_VECTOR (11 downto 0);
-        cin : in STD_LOGIC;
-        cout : out STD_LOGIC);
- 
+component multiplication is
+	port( X: in std_logic_vector (6 downto 0);
+		Y: in std_logic_vector (6 downto 0);
+		CLK, RST: in std_logic;
+		rez: out std_logic_vector(11 downto 0);
+		carryM: out std_logic);
 end component;
 
-component impartitor is
-       Port ( a : in STD_LOGIC_VECTOR (6 downto 0);
-        b : in STD_LOGIC_VECTOR(6 downto 0);
-        s : in STD_LOGIC_VECTOR (11 downto 0);
-        bin : in STD_LOGIC;
-        bout : out STD_LOGIC);
- 
+
+component division is
+	port( X: in std_logic_vector (6 downto 0);
+		Y: in std_logic_vector (6 downto 0);
+		CLK, RST: in std_logic;
+		rez: out std_logic_vector(11 downto 0));
 end component;
+
 
 component sumat_compl is
     Port ( a : in STD_LOGIC_vector (6 downto 0);
            b : in STD_LOGIC_vector (6 downto 0);
+          -- clk,rst: in std_logic;
            cout : out STD_LOGIC;
            cin : in STD_LOGIC;
            s : out STD_LOGIC_vector (11 downto 0));
 end component;
 
+
 component scazator_complet is
 
  Port ( a : in STD_LOGIC_vector (6 downto 0);
          b : in STD_LOGIC_vector (6 downto 0);
+         -- clk,rst: in std_logic;
          bout : out STD_LOGIC;
          bin : in STD_LOGIC;
          s : out STD_LOGIC_vector (11 downto 0));
@@ -113,7 +118,7 @@ end component;
 --signal carry :std_logic_vector (7 downto 0);
 --signal borrow:std_logic_vector (7 downto 0);
 signal cp_i: std_logic_vector(3 downto 0);
-signal cp_o: std_logic_vector(6 downto 0);
+
 signal rez1 :  STD_LOGIC_VECTOR (11 downto 0);
 signal rez2 :  STD_LOGIC_VECTOR (11 downto 0);
 signal rez3 :  STD_LOGIC_VECTOR (11 downto 0);
@@ -137,13 +142,14 @@ eth1: sumat_compl port map (a,b, cout,cin, rez1);
 
 eth3: scazator_complet port map(a,b,bout,bin,rez2);
 --rez<=a;
-
-
-eth4: inmultitor port map(a,b,rez3,cin,cout);
 --rez<=a;
 
 
-eth5: impartitor port map(a,b,rez4,cin,cout);
+eth4:  multiplication  port map(a,b,clk,rst,rez3,cout);
+--rez<=a;
+
+
+eth5: division port map(a,b,clk,rst,rez);
 --rez<=a;
 
 
@@ -170,30 +176,35 @@ case rst is
    
    end case;
   when '1'=> 
-  rez<="0000000";
+  rez<="000000000000";
    end case;
 end process;
 
-
+--unitati
 out1(0)<=rez(0);
 out1(1)<=rez(1);
 out1(2)<=rez(2);
 out1(3)<=rez(3);
+anod<="110";
+out2:  bcd_7segment  port map (out1,cp_o,anod); 
 
-out2:  bcd_7segment  port map (out1,cp_o); 
+
+--zeci
 out1(0)<=rez(4);
 out1(1)<=rez(5);
 out1(2)<=rez(6);
 out1(3)<=rez(7);
+anod<="101";
+out3:  bcd_7segment  port map (out1,cp_o,anod); 
 
-out3:  bcd_7segment  port map (out1,cp_o); 
 
+--sute
 out1(0)<=rez(8);
 out1(1)<=rez(9);
 out1(2)<=rez(10);
 out1(3)<=rez(11);
-
-out4:  bcd_7segment  port map (out1,cp_o); 
+anod<="011";
+out4:  bcd_7segment  port map (out1,cp_o,anod); 
 
   -- end process;
   
