@@ -5,7 +5,8 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity division is
 	port( X: in std_logic_vector (6 downto 0);
 		Y: in std_logic_vector (6 downto 0);
-		CLK, RST: in std_logic;
+		--CLK, 
+		RST: in std_logic;
 		rez: out std_logic_vector(11 downto 0));
 end entity;
 
@@ -15,17 +16,17 @@ architecture division_a of division is
 begin									
 	
 	process(RST)
-		variable deimpartit, impartitor: std_logic_vector (7 downto 0);
-		variable cat: std_logic_vector (7 downto 0);
+		variable deimpartit, impartitor: std_logic_vector (6 downto 0);
+		variable cat: std_logic_vector (11 downto 0);
 		variable registru: std_logic_vector (15 downto 0); 
 		variable AUX: std_logic;
 	begin 		
-	if CLK'event and CLK='1' then	
+	--if CLK'event and CLK='1' then	
 		if RST = '1' then
 			N <= "1000";
 			registru(15 downto 8) := x"00";
-			registru(7 downto 0) := X;
-			cat := x"00";
+			registru(6 downto 0) := X;
+			cat := "000000000000";
 			deimpartit := X;
 			impartitor := Y;
 		else
@@ -50,7 +51,7 @@ begin
 				rez<= cat;
 			end loop;
 		end if;
-	end if;
+	--end if;
 	end process;
 	
 	
